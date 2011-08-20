@@ -1,6 +1,8 @@
 require "rubygems"
 require "sinatra"
 require "sqlite3"
+require 'will_paginate'
+require 'will_paginate/data_mapper'
 require "dm-core"
 require "dm-timestamps"
 require "dm-migrations"
@@ -50,6 +52,7 @@ end
 
 
 helpers do
+  
   def answered_question(uid, qid) 
     @answer = Answer.new
     @answer.user_id = uid
@@ -85,6 +88,7 @@ helpers do
   end
 
 end
+
 
 # View Index Page / User's Own Questions
 get '/' do
@@ -159,10 +163,10 @@ get '/myquestions' do
   # Obtain a list of unanswered question by doing a 
   # join of the Answers table and the Questions table
   # and also excluding a user's own questions.
-  #@questions = questions_list( settings.test_uid )
-  erb :question;
+  @questions = Question.paginate(:user_id => settings.test_uid, 
+                                 :page => params[:page], :per_page => 10)
+  erb :my_questions
 end
-
 
 # A Simple page detailing what page redirect
 # which says that the question was posted

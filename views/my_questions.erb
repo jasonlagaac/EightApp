@@ -1,0 +1,23 @@
+<div id="content-ask">
+	<div id="content-top">
+    <a href="/">&#8592; back</a>
+    <a href="/myquestions" id="menu_item_selected">my questions.</a>
+    <a href="/answer" id="menu_item">answer.</a>
+    <a href="/ask" id="menu_item">ask.</a>
+  </div>
+  <div id="question">
+    <%= will_paginate @questions, :page_links => false %>
+    <% @questions.each do | record |  %>
+      <div id="own_question">
+        <div class="text"><%= record.question_txt  %></div>
+        <% if record.vote_yes > record.vote_no %>
+          <div class="answer">Yes</div>
+        <% elsif record.vote_yes == record.vote_no %>
+          <div class="answer">No Answer Yet</div>
+        <% else %>
+          <div class="answer">No</div>
+        <% end %>
+      </div>
+    <% end %>
+	</div>
+</div>
