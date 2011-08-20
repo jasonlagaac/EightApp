@@ -1,0 +1,42 @@
+<div id="content-index">
+  <% if settings.test_uid %>
+  <div id="content-top">
+  
+  </div>
+  <% end %>
+  <div id="content-right">
+  <% if settings.test_uid %>
+    <div class="option"></div>
+    <div class="option"><a href="/signout">sign-out</a></div>
+    <div class="option"></div>
+  <% else %>
+    <div class="option"></div>
+    <div class="option">sign-in</div>
+    <div class="option"></div>
+  <% end %>
+  </div>
+  <div id="content-center">
+    <img src="/images/eightapp.png" width="250"></img>
+  </div>
+  <div id="content-left">
+  <% if settings.test_uid %>
+    <div class="option" id="slot-1"><a href="/ask">ask</a></div>
+    <div class="option" id="slot-2"><a href="/answer">answer</a></div>
+    <div class="option" id="slot-3"><a href="/myquestions">my questions</a></div>
+  <% else %>
+    <div class="option" id="slot-1"><a href="/join">joini</a></div>
+    <div class="option" id="slot-2"></div>
+    <div class="option" id="slot-3"><a href="list">take a peek</a></div>
+  <% end %>
+  </div>
+</div>
+
+<% if !settings.test_uid %>
+<div id="content-index-bottom">
+    <p>
+      <b>Eight</b> is a social <i>"Magic 8 Ball"</i> app which uses your Twitter followers and random people 
+      to help you find an answer. The magical internet will vote <i>Yes</i> or <i>No</i> to your questions. 
+      <b>This will be your answer.</b> No ifs, ands or buts.<br/><br/> <b>Beware its wrath...</b>
+    </p>
+</div>
+<% end %>

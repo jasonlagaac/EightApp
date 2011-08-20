@@ -6,8 +6,7 @@ require "dm-timestamps"
 require "dm-migrations"
 
 configure :development do
-  set :sessions, true
-  set :test_uid,  1
+  set :test_uid,  2
   DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/eightapp.db")
 end
 
@@ -31,6 +30,7 @@ class Question
   property :vote_no,      Integer,  :default => 0
 
   belongs_to :user
+
 end
 
 class Answer
@@ -40,6 +40,7 @@ class Answer
   property :answered_question_id,   Integer
   
   belongs_to :user  
+
 end
 
 configure :development do
@@ -47,9 +48,48 @@ configure :development do
   DataMapper.auto_upgrade!
 end
 
+
+helpers do
+  def answered_question(uid, qid) 
+    @answer = Answer.new
+    @answer.user_id = uid
+    @answer.answered_question_id = qid
+
+    if @answer.save
+      return true
+    else
+      return false
+    end
+  end
+
+  def questions_list( uid )
+    repository(:default).adapter.query(
+      "SELECT questions.id FROM questions
+       WHERE  questions.user_id != #{uid}"
+    )
+  end
+
+  def get_answered_questions( uid )
+    repository(:default).adapter.query(
+      "SELECT answers.answered_question_id FROM answers
+       WHERE user_id = #{uid}"
+    )
+  end
+
+  def get_unanswered_question( uid )
+    @answered_questions = get_answered_questions( uid )
+    @questions = questions_list( uid )
+
+    @result = @questions - @answered_questions
+    return @result.first
+  end
+
+end
+
 # View Index Page / User's Own Questions
 get '/' do
-
+  @authorized = true;
+  erb :index
 end
 
 # Ask a Question
@@ -64,7 +104,7 @@ post '/ask' do
 	    redirect '/ask'
 	else
 		@question = Question.new(params[:post])
-    @question.user_id = 1
+    @question.user_id = settings.test_uid 
 
     if @question.save
       redirect "/question_posted" 
@@ -75,7 +115,36 @@ post '/ask' do
 end
 
 
-# View Questions and answer Yes or No
+# Answer a Question
+get '/answer' do
+  @question = Question.get(get_unanswered_question(settings.test_uid))
+
+  erb :answer
+end
+
+post '/answer' do
+  @question = Question.get(get_unanswered_question(settings.test_uid))
+ 
+  if @question 
+    if (params[:post][:answer] == 'yes')
+      @question.vote_yes += 1
+      @question.save
+      answered_question(settings.test_uid, @question.id)
+    elsif (params[:post][:answer] == 'no')
+      @question.vote_no += 1
+      @question.save
+      answered_question(settings.test_uid, @question.id)
+    else
+      redirect '/answer'
+    end
+  else
+    redirect '/'
+  end  
+  
+  redirect '/answer'
+end
+
+# View Questions
 get '/question/:id' do 
   @question = Question.get(params[:id])
   if @question
@@ -85,33 +154,13 @@ get '/question/:id' do
   end
 end
 
-post '/question/:id' do
-  @question = Question.get(params[:id])
-  
-  if @question
-    if (params[:post][:answer] == 'yes')
-      @question.yes += 1
-    elsif (params[:post][:answer] == 'no')
-      @question.no += 1 
-    else
-      redirect 'question/:id'
-    end
-  else
-    redirect 'list'
-  end
-end
-
-# View a list of unanswered questions
-get '/list' do
+# View a list of questions
+get '/myquestions' do
   # Obtain a list of unanswered question by doing a 
   # join of the Answers table and the Questions table
   # and also excluding a user's own questions.
-  @unanswered_questions = repository(:default).adapter.query(
-    "SELECT questions.id FROM questions 
-      LEFT OUTER JOIN answers ON questions.id = answers.answered_question_id
-      WHERE answers.answered_question_id is null and questions.user_id != #{settings.test_uid}"
-    )
-  @unanswered_questions.first.to_s
+  #@questions = questions_list( settings.test_uid )
+  erb :question;
 end
 
 
@@ -122,5 +171,5 @@ get '/question_posted' do
 
   # Obtain the latest question from a specific user
   # and then post "You're question blah has been posted"
-  @question.question_txt
+  erb :question_posted
 end

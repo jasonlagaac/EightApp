@@ -1,0 +1,24 @@
+
+<div id="content-ask">
+	<div id="content-top">
+    <a href="/">< back</a>
+    <a href="/myquestions" id="menu_item">my questions.</a>
+    <a href="/answer" id="menu_item_selected">answer.</a>
+    <a href="/ask" id="menu_item">ask.</a>
+  </div>
+  <div id="question">
+		<form action="/answer" method="post">
+      <% if @question %>
+		    <p><%= @question.question_txt %></p>
+        <p>
+			    <input class="action" type="submit" name="post[answer]" value="yes">
+		    </p>
+        <p>
+			    <input class="action" type="submit" name="post[answer]" value="no">
+		    </p>
+      <% else %>
+		    <p>There are no questions for you to answer...</p>
+      <% end %>
+    </form>
+	</div>
+</div>

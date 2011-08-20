@@ -35,28 +35,152 @@ body {
 	margin: auto;
 }
 
-/****************  
+a {
+  color:#eee;
+  text-decoration: none;
+}
 
-   Index Views 
+a:hover {
+  color:#000;
+}
 
-*****************/ 
+/**********************  
+
+      Index Views 
+
+***********************/ 
+
+#content-index {
+  height: 200px;
+  width: 750px;
+
+  margin-top: 50px;
+
+  font: 15px/1.5 DroidSerif;
+}
+
+
+
+#content-index b {
+  font: 15px/1.5 DroidSerifBold;
+}
+
+#content-index i {
+  font: 15px/1.5 DroidSerifItalic;
+}
+
+#content-index #content-top {
+  width: 750px;
+  height: 100px;
+}
+
+#content-index #content-left,#content-right {
+  width: 220px;
+  height: 300px;
+  
+  color: #eee;
+
+  line-height: 90%;
+  font-family: DroidSerif; 
+  font-size: 50px;
+}
+
+#content-index #content-left,#content-right a {
+  text-decoration: none;
+}
+
+#content-index .option {
+  height: 70px;
+  padding: 10px 0;
+}
+
+#content-index #content-left #slot-1 {
+  margin-right:-20px;
+  -moz-transform: rotate(15deg); 
+  -webkit-transform: rotate(15deg); 
+}
+
+#content-index #content-left #slot-3 {
+  margin-right:-20px;
+  -moz-transform: rotate(-15deg); 
+  -webkit-transform: rotate(-15deg); 
+}
+#content-index #content-right {
+  float: right;
+  text-align: left;
+  padding-left: 8px;
+}
+
+#content-index #content-left {
+  text-align: right;
+  position: absolute;
+  
+}
+
+#content-index #content-center {
+  width:  295px;
+  height: 300px;
+  float:right;
+  text-align: center;
+  position: relative;
+
+}
+
+#content-index-bottom {
+  margin: auto;
+  padding-top: 150px;
+  text-align: center;
+  color: #eee;
+  width:300px;
+  font: 15px/1.5 DroidSerif;
+}
+
+
+
+#content-index-bottom p:hover {
+  color: #000;
+}
+
+/**********************  
+
+   Ask Question Views 
+
+***********************/ 
+
 
 #content-ask {
 	width: 750px;
 	height: 400px;
-	margin: 25% auto;
 }
 
+#content-ask #content-top {
+  width: 750px;
+  height: 100px;
+
+  margin-top: 50px;
+
+  font-size: 35px;
+  font-family: DroidSerif;
+}
+
+#content-ask #content-top #menu_item,#menu_item_selected {
+  padding-right: 10px;
+  float: right;
+}
+
+#content-ask #content-top #menu_item_selected {
+  color: #000;
+}
 
 #content-ask #question {
   width: 600px;
   height: 300px;
 
-  margin: auto;
+  margin: 10% auto;
 
 
   font-family: DroidSerif;
-  font-size: 25px;
+  font-size: 35px;
 }
 
 #content-ask #question i {
@@ -65,12 +189,12 @@ body {
 
 #content-ask #question .txtbox {
   border: none;
-  width: 400px;
+  width: 500px;
 
   text-align: center;
   
   line-height: 1;
-  font: 15px/1.5 DroidSans;
+  font: 20px/1.5 DroidSerif;
   outline: none;
   border-bottom: dashed #eee;
 }
@@ -83,7 +207,7 @@ body {
   color: #eee;
 
   background: transparent;
-  font: 124% DroidSerifBold; 
+  font: 124% DroidSerif; 
 }
 
 #content-ask #question  .action:hover {
@@ -194,7 +318,9 @@ body {
 }
 
 
+#content-ask #answer {
 
+}
 
 
 
