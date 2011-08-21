@@ -8,7 +8,7 @@ require "dm-timestamps"
 require "dm-migrations"
 
 configure :development do
-  set :test_uid,  2
+  set :test_uid,  1 
   DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/eightapp.db")
 end
 
@@ -149,22 +149,21 @@ post '/answer' do
 end
 
 # View Questions
-get '/question/:id' do 
+get '/view_question/:id' do 
   @question = Question.get(params[:id])
+  
   if @question
-    erb :show
-  else
-    redirect '/list'
+    erb :view_question
   end
 end
 
 # View a list of questions
-get '/myquestions' do
+get '/my_questions' do
   # Obtain a list of unanswered question by doing a 
   # join of the Answers table and the Questions table
   # and also excluding a user's own questions.
   @questions = Question.paginate(:user_id => settings.test_uid, 
-                                 :page => params[:page], :per_page => 10)
+                                 :page => params[:page], :per_page => 5)
   erb :my_questions
 end
 

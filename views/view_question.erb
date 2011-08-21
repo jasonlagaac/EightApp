@@ -1,0 +1,40 @@
+<div id="content-ask">
+  <div id="content-top">
+      <a href="/">&#8592; back</a>
+      <a href="/my_questions" id="menu_item_selected">my questions.</a>
+      <a href="/answer" id="menu_item">answer.</a>
+      <a href="/ask" id="menu_item">ask.</a>
+  </div>
+
+  <!-- Display the question and icon -->
+  <div id="question-view">
+    <div id="icon">
+      <img src="/images/question.png" width=90 height=90 />
+    </div>
+    <div id="details">
+      <p><%= @question.question_txt %></p>
+    </div>
+  </div>
+  <div id="separator">
+  </div>
+
+
+  <!-- Display the results of the question -->
+  <div id="result">
+    <div id="value-minor">
+     <%= @question.vote_no %> 
+    </div>
+    <div id="label-minor">
+     no 
+    </div>
+  </div>
+  <div id="result">
+    <div id="value-major">
+     <%= @question.vote_yes %> 
+    </div>
+    <div id="label-major">
+     yes 
+    </div>
+  </div>
+
+</div>

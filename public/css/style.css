@@ -225,21 +225,16 @@ a:hover {
    Question Views 
 
 ********************/ 
-#content-question {
-  width: 750px;
-  height: 400px;
-}
-
-#content-question #question-view {
+#question-view {
   width: 750px;
   height: 100px;
 
   margin: auto;
-  padding-top: 100px;
+  padding-top: 50px;
 }
 
 
-#content-question #question-view #icon {
+#question-view #icon {
   width: 80px;
   height: 100px; 
 
@@ -251,11 +246,11 @@ a:hover {
 
 }
 
-#content-question #question-view #details {
+#question-view #details, #details-no_questions {
   width: 500px;
   height: 100px;
   
-  font-family: Museo;
+  font-family: DroidSerif;
   font-size: 20px;
   
   float:left;
@@ -268,8 +263,13 @@ a:hover {
   
 }
 
+#question-view #details-no_questions {
+  font-size: 35px;
 
-#content-question #separator {
+}
+
+
+#separator {
   width: 250px;
   height:10px;
   
@@ -278,50 +278,97 @@ a:hover {
 }
 
 
-#content-question #result {
+#result {
   width: 375px;
   height: 300px;
 
-  font-family: Museo;
+  font-family: DroidSerif;
   float: right;  
   text-align: center;
 }
 
-#content-question #result #value-major,#value-minor {
+#result #value-major,#value-minor {
   width: 375px;
   height: 200px;
   font-size: 120px;
 }
 
-#content-question #result #value-major {
-  color: #000;
-}
 
-#content-question #result #value-minor {
+#result #value-minor {
   color: #ddd;
 }
 
-#content-question #result #label-major,#label-minor {
+#result #label-major,#label-minor {
   width: 375px;
   height: 100px;
   
-  font-size: 30px;
-}
-
-#content-question #result #label-major {
-  color: #000;
+  font-size: 60px;
 }
 
 
-#content-question #result #label-minor {
+#result #label-minor {
   color: #ddd;
 }
 
-
-#content-ask #answer {
-
+#result input {
+  font-size: 30px;:w!
+  
 }
 
 
+#result .action {
+  margin: 0;
+  padding: 0;
+  border: 0;
 
+  color: #eee;
+
+  background: transparent;
+  font: 60px DroidSerif; 
+}
+
+#result  .action:hover {
+  color: #000;
+}
+
+#question-list {
+  width: 500px;
+  height: 600px;
+  margin-left: 70px;
+}
+
+#question-list #nav {
+  font-family: DroidSerif;
+  font-size: 25px;
+    
+  padding-bottom: 20px;
+}
+
+#question-list #own-question {
+  width: 600px;
+  height: 60px;
+  padding-bottom: 30px;
+  
+  font-family: DroidSerif;
+  font-size: 20px;
+  
+  float: left;
+}
+
+#question-list #own-question .text {
+  width: 500px;
+  height: 60px;
+  float: left;
+}
+
+#question-list #own-question .answer {
+  width: 50px;
+  height: 60px;
+  
+  float: right;
+
+  font-family: DroidSerifBold;
+  font-size: 25px;
+  margin-top: -5px
+}
 

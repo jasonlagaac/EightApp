@@ -1,24 +1,37 @@
-
 <div id="content-ask">
-	<div id="content-top">
+  <div id="content-top">
     <a href="/">&#8592; back</a>
-    <a href="/myquestions" id="menu_item">my questions.</a>
+    <a href="/my_questions" id="menu_item">my questions.</a>
     <a href="/answer" id="menu_item_selected">answer.</a>
     <a href="/ask" id="menu_item">ask.</a>
   </div>
-  <div id="question">
-		<form action="/answer" method="post">
-      <% if @question %>
-		    <p><%= @question.question_txt %></p>
-        <p>
-			    <input class="action" type="submit" name="post[answer]" value="yes">
-		    </p>
-        <p>
-			    <input class="action" type="submit" name="post[answer]" value="no">
-		    </p>
-      <% else %>
-		    <p>There are no questions for you to answer...</p>
-      <% end %>
+  <% if @question %>
+    <form action="/answer" method="post">
+      <div id="question-view">
+        <div id="icon">
+          <img src="/images/question.png" width=90 height=90 />
+        </div>
+        <div id="details">
+          <p><%= @question.question_txt %></p>
+        </div>
+      </div>
+      <div id="separator">
+      </div>
+		  
+    <div id="result">
+      <input class="action" type="submit" name="post[answer]" value="no">
+    </div>
+  
+    <div id="result">
+      <input class="action" type="submit" name="post[answer]" value="yes">
+    </div>
+  <% else %>
+    <div id="question-view">
+        <div id="details-no_questions">
+	  <p>There are no questions for you to answer...</p>
+        </div>
+    </div>
+  <% end %>
     </form>
-	</div>
+  </div>
 </div>

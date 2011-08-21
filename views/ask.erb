@@ -1,19 +1,19 @@
 <div id="content-ask">
 	<div id="content-top">
     <a href="/">&#8592; back</a>
-    <a href="/myquestions" id="menu_item">my questions.</a>
+    <a href="/my_questions" id="menu_item">my questions.</a>
     <a href="/answer" id="menu_item">answer.</a>
     <a href="/ask" id="menu_item_selected">ask.</a>
   </div>
   <div id="question">
-		<form action="/ask" method="post">
-		  <p>Enter a question that results in a <i> Yes </i> or <i> No </i> answer</p>
-      <p>
-			  <input class="txtbox" maxlength=128 type="text" name="post[question_txt]">
-      </p>
-      <p>
-			  <input class="action" type="submit" value="ask question">
-		  </p>
+      <form action="/ask" method="post">
+	<p>Enter a question that results in a <i> Yes </i> or <i> No </i> answer</p>
+        <p>
+          <input class="txtbox" maxlength=90 type="text" name="post[question_txt]">
+        </p>
+        <p>
+	  <input class="action" type="submit" value="ask question">
+	</p>
     </form>
-	</div>
+  </div>
 </div>
