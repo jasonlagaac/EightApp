@@ -8,7 +8,7 @@ $(document).ready(function() {
       txtColor = '#000';
     } else {
       duration = 240;
-      txtColor = '#eee'; 
+      txtColor = '#ddd'; 
     }
 
     $(this).animate({'color':txtColor}, duration);

@@ -1,17 +1,21 @@
 <div id="content-ask">
+  <% if @client.authorized? %>
   <div id="content-top">
       <a href="/">&#8592; back</a>
       <a href="/my_questions" id="menu_item_selected">my questions.</a>
       <a href="/answer" id="menu_item">answer.</a>
       <a href="/ask" id="menu_item">ask.</a>
   </div>
+  <% end %>
 
   <!-- Display the question and icon -->
   <div id="question-view">
     <div id="icon">
-      <img src="/images/question.png" width=90 height=90 />
+      	<img src="http://api.twitter.com/1/users/profile_image/<%= User.first(:id => @question.user_id).username %>?size=bigger" 
+		width=75 height=75 />
     </div>
     <div id="details">
+	  <p><h1><%= User.first(:id => @question.user_id).username %> asked:</h1></p>
       <p><%= @question.question_txt %></p>
     </div>
   </div>
@@ -21,10 +25,10 @@
 
   <!-- Display the results of the question -->
   <div id="result">
-    <div id="value-minor">
+    <div id="value-major">
      <%= @question.vote_no %> 
     </div>
-    <div id="label-minor">
+    <div id="label-major">
      no 
     </div>
   </div>
@@ -37,4 +41,9 @@
     </div>
   </div>
 
+  <% if !@client.authorized? %>
+  <div id="result">
+	<p><a href="/">Want to answer?<br/> Join eight via twitter</a></p>
+  </div>
+  <% end %>
 </div>

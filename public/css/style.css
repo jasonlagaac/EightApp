@@ -36,9 +36,10 @@ body {
 }
 
 a {
-  color:#eee;
+  color:#ddd;
   text-decoration: none;
 }
+
 
 
 /**********************  
@@ -75,7 +76,7 @@ a {
   width: 220px;
   height: 300px;
   
-  color: #eee;
+  color: #ddd;
 
   line-height: 90%;
   font-family: DroidSerif; 
@@ -127,7 +128,7 @@ a {
   margin: auto;
   padding-top: 150px;
   text-align: center;
-  color: #eee;
+  color: #ddd;
   width:300px;
   font: 15px/1.5 DroidSerif;
 }
@@ -193,7 +194,7 @@ a {
   line-height: 1;
   font: 20px/1.5 DroidSerif;
   outline: none;
-  border-bottom: dashed #eee;
+  border-bottom: dashed #ddd;
 }
 
 #content-ask #question  .action {
@@ -201,7 +202,7 @@ a {
   padding: 0;
   border: 0;
 
-  color: #eee;
+  color: #ddd;
 
   background: transparent;
   font: 124% DroidSerif; 
@@ -219,16 +220,19 @@ a {
 ********************/ 
 #question-view {
   width: 750px;
-  height: 100px;
+  height: 130px;
 
   margin: auto;
-  padding-top: 50px;
+  padding-top: 20px;
 }
 
+#question-view  {
+	float:center;
+}
 
 #question-view #icon {
   width: 80px;
-  height: 100px; 
+  height: 130px; 
 
   float: left;
   padding: 0 20px;
@@ -255,6 +259,10 @@ a {
   
 }
 
+#question-view h1{
+	font: 30px/1.5 DroidSerifBold;
+}
+
 #question-view #details-no_questions {
   font-size: 35px;
 
@@ -263,9 +271,9 @@ a {
 
 #separator {
   width: 250px;
-  height:10px;
+  height:25px;
   
-  border-top: solid #eee;
+  border-bottom: solid #ddd;
   margin: auto;
 }
 
@@ -278,6 +286,8 @@ a {
   float: right;  
   text-align: center;
 }
+
+
 
 #result #value-major,#value-minor {
   width: 375px;
@@ -303,8 +313,7 @@ a {
 }
 
 #result input {
-  font-size: 30px;:w!
-  
+  font-size: 30px;
 }
 
 
@@ -313,14 +322,18 @@ a {
   padding: 0;
   border: 0;
 
-  color: #eee;
+  color: #ddd;
 
   background: transparent;
   font: 60px DroidSerif; 
 }
 
-#result  .action:hover {
+#result .action:hover {
   color: #000;
+}
+
+#result p {
+   font-size:20px;
 }
 
 #question-list {
@@ -353,7 +366,7 @@ a {
   float: left;
 }
 
-#question-list #own-question .answer {
+#question-list #own-question .answer, .answer-list {
   width: 50px;
   height: 60px;
   
@@ -362,5 +375,12 @@ a {
   font-family: DroidSerifBold;
   font-size: 25px;
   margin-top: -5px
+}
+
+#question-list #own-question .answer-list {
+	width: 70px;
+	height: 20px;
+  	font-size: 15px;
+  
 }
 

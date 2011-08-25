@@ -8,6 +8,7 @@ require "dm-timestamps"
 require "dm-migrations"
 require "dm-validations"
 require "twitter_oauth"
+require "googl"
 
 # Initial Configuration #
 #########################
@@ -17,6 +18,11 @@ configure :development do
   @@config = YAML.load_file("config.yml") rescue nil || {}
 end
 
+configure :production do
+  set :sessions, true
+  DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+end
+
 
 # User Class #
 ##############
@@ -24,9 +30,10 @@ class User
   include DataMapper::Resource
 
   property :id,           Serial
-  property :twitter_id,   Integer, :key => true
-  property :access_token, String, :length => 128 
-  property :secret_token, String, :length => 128
+  property :twitter_id,   Integer,  :key => true
+  property :username,     String,   :length => 128
+  property :access_token, String,   :length => 128 
+  property :secret_token, String,   :length => 128
   
   has n,  :questions
   has n,  :answers
@@ -40,6 +47,7 @@ class Question
 
   property :id,           Serial
   property :question_txt, String,   :length => 140, :required => true
+  property :created_at,   DateTime
   property :vote_yes,     Integer,  :default => 0
   property :vote_no,      Integer,  :default => 0
 
@@ -70,7 +78,6 @@ end
 # courtesy of Moomerman and Sinitter      
 before do
   next if request.path_info =~ /ping$/
-  @user = session[:user]
   @client = TwitterOAuth::Client.new(
     :consumer_key => ENV['CONSUMER_KEY'] || @@config['consumer_key'],
     :consumer_secret => ENV['CONSUMER_SECRET'] || @@config['consumer_secret'],
@@ -79,59 +86,6 @@ before do
   )
 
   @rate_limit_status = @client.rate_limit_status
-end
-
-# General Helpers #
-###################
-helpers do
-  # Obtain twitter user id
-  def get_twitter_uid
-    if @client.authorized?
-        user_data = @client.info
-        return user_data['id']
-    end
-
-    return nil
-  end
-
-  # Saved Answered Question 
-  def answered_question(uid, qid) 
-    answer = Answer.new
-    answer.user_id = uid
-    answer.answered_question_id = qid
-
-    if answer.save
-      return true
-    else
-      return false
-    end
-  end
-
-  # Obtain list of un-answered questions
-  def questions_list( uid )
-    repository(:default).adapter.query(
-      "SELECT questions.id FROM questions
-       WHERE  questions.user_twitter_id != #{uid}"
-    )
-  end
-
-  # Obtain a list of answered questions 
-  def get_answered_questions( uid )
-    repository(:default).adapter.query(
-      "SELECT answers.answered_question_id FROM answers
-       WHERE user_twitter_id = #{uid}"
-    )
-  end
-
-  # Get a single unanswered question
-  def get_unanswered_question( uid )
-    answered_questions = get_answered_questions( uid )
-    questions = questions_list( uid )
-
-    result = questions - answered_questions
-    return result.first
-  end
-
 end
 
 # View Index Page
@@ -184,6 +138,19 @@ get '/question_posted' do
   end
 end
 
+# Share the posted question amongst followers
+get '/question_posted/share' do
+  if @client.authorized?
+    user = User.first(:twitter_id => get_twitter_uid)
+    question = Question.last(:user_id => user.id)
+    url = Googl.shorten("http://eightapp.safetyscissors.co/view_question/#{question.id}")
+    message = "I asked \"#{question.question_txt}\" on eight #{url.short_url}"
+    @client.update(message)
+  end
+  
+  redirect '/my_questions'
+end
+
 # Answer a Question #
 #####################
 get '/answer' do
@@ -225,7 +192,7 @@ end
 get '/view_question/:id' do 
   @question = Question.get(params[:id])
   
-  if @question
+  if !@question.nil?
     erb :view_question
   else
     redirect '/'
@@ -236,11 +203,22 @@ end
 get '/my_questions' do
   if @client.authorized?
     @questions = Question.paginate(:user_twitter_id => get_twitter_uid, 
-                                   :page => params[:page], :per_page => 5)
+                                   :page => params[:page], 
+                                   :per_page => 5, 
+                                   :order => [:created_at.desc]
+                                  )
     erb :my_questions
   else
     redirect '/'
   end
+end
+
+get '/list' do
+  @questions = Question.paginate(:page => params[:page], 
+                                 :per_page => 10, 
+                                 :order => [:created_at.desc]
+                                )
+  erb :list
 end
 
 
@@ -268,20 +246,95 @@ get '/auth' do
   rescue OAuth::Unauthorized
   end
 
-  if @client.authorized?
-    session[:access_token] = @access_token.token
-    session[:secret_token] = @access_token.secret
-    session[:user] = true
+
+  session[:access_token] = @access_token.token
+  session[:secret_token] = @access_token.secret
+  session[:user] = true
     
-    if !User.all(:twitter_id => get_twitter_uid)
+  puts get_twitter_username
+  
+  if @client.authorized?
       new_user = User.new(
-                    :twitter_id => get_twitter_uid, 
+                    :twitter_id => get_twitter_uid,
+                    :username => get_twitter_username, 
                     :access_token => @access_token.token, 
                     :secret_token => @access_token.secret
               )
-      new_user.save
-    end
+      new_user.save if User.all(:twitter_id => get_twitter_uid).empty?
   end
 
   redirect '/'
+end
+
+get '/signout' do
+  session[:user] = nil
+  session[:request_token] = nil
+  session[:request_token_secret] = nil
+  session[:access_token] = nil
+  session[:secret_token] = nil
+  session.clear
+  
+  redirect '/'
+end
+
+# General Helpers #
+###################
+helpers do
+  # Obtain twitter user id
+  def get_twitter_uid
+    if @client.authorized?
+        user_data = @client.info
+        return user_data['id']
+    end
+
+    return nil
+  end
+  
+  def get_twitter_username
+    if @client.authorized?
+      user_data = @client.info
+      return user_data['screen_name']
+    end
+    
+    return nil
+  end
+
+  # Saved Answered Question 
+  def answered_question(uid, qid) 
+    answer = Answer.new
+    answer.user_id = uid
+    answer.answered_question_id = qid
+
+    if answer.save
+      return true
+    else
+      return false
+    end
+  end
+
+  # Obtain list of un-answered questions
+  def questions_list( uid )
+    repository(:default).adapter.query(
+      "SELECT questions.id FROM questions
+       WHERE  questions.user_twitter_id != #{uid}"
+    )
+  end
+
+  # Obtain a list of answered questions 
+  def get_answered_questions( uid )
+    repository(:default).adapter.query(
+      "SELECT answers.answered_question_id FROM answers
+       WHERE user_twitter_id = #{uid}"
+    )
+  end
+
+  # Get a single unanswered question
+  def get_unanswered_question( uid )
+    answered_questions = get_answered_questions( uid )
+    questions = questions_list( uid )
+
+    result = questions - answered_questions
+    return result.first
+  end
+
 end
