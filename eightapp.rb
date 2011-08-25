@@ -7,6 +7,7 @@ require "dm-core"
 require "dm-timestamps"
 require "dm-migrations"
 require "dm-validations"
+require "dm-postgres-adapter"
 require "twitter_oauth"
 require "googl"
 
