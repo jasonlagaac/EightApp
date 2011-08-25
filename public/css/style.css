@@ -40,9 +40,6 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  color:#000;
-}
 
 /**********************  
 
@@ -208,11 +205,6 @@ a:hover {
 
   background: transparent;
   font: 124% DroidSerif; 
-}
-
-#content-ask #question  .action:hover {
-  color: #000;
-
 }
 
 #content-ask #question p {

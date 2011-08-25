@@ -1,0 +1,6 @@
+# Ignore these bad boys #
+#########################
+*.db
+*.swp
+*.log
+*.yml
