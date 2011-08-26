@@ -1,6 +1,5 @@
 require "rubygems"
 require "sinatra"
-require "sqlite3"
 require 'will_paginate'
 require 'will_paginate/data_mapper'
 require "dm-core"
