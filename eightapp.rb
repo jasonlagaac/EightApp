@@ -144,7 +144,7 @@ get '/question_posted/share' do
     user = User.first(:twitter_id => get_twitter_uid)
     question = Question.last(:user_id => user.id)
     url = Googl.shorten("http://eightapp.safetyscissors.co/view_question/#{question.id}")
-    message = "I asked \"#{question.question_txt}\" on eight #{url.short_url}"
+    message = "I asked \"#{question.question_txt}\" on eight #{url.short_url} #eightapp"
     @client.update(message)
   end
   
