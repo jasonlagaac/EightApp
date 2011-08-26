@@ -69,7 +69,7 @@ end
 
 # Create the database schema #
 ##############################
-configure :development do
+configure do
   DataMapper.auto_upgrade!
 end
 
@@ -214,10 +214,7 @@ get '/my_questions' do
 end
 
 get '/list' do
-  @questions = Question.paginate(:page => params[:page], 
-                                 :per_page => 10, 
-                                 :order => [:created_at.desc]
-                                )
+  @questions = Question.paginate(:page => params[:page], :per_page => 10)
   erb :list
 end
 
