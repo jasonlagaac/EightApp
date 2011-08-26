@@ -5,18 +5,6 @@
     <a href="/list" id="menu_item_selected">take-a-peek.</a>
   </div>
   <div id="question-list">
-	<!-- 
-    <div id="nav">
-      <%= will_paginate @questions, :page_links => false %>
-    </div>
-      <% @questions.each do | record |  %>
-      <a href="/view_question/<%= record.id %>"> 
-        <div id="own-question">
-          <div class="text"><%= record.question_txt  %></div>
-          <div class="answer-list">asked by <%= User.first(:twitter_id => record.user_twitter_id).username %></div>
-        </div>
-      </a>
-      <% end %>
-	-->
+		<% @questions.first.question_txt %>
    </div>
 </div>
