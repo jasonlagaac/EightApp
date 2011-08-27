@@ -1,5 +1,6 @@
 # Ignore these bad boys #
 #########################
+.DS_Store
 *.db
 *.swp
 *.log

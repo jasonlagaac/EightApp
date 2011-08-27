@@ -154,17 +154,12 @@ end
 # Answer a Question #
 #####################
 get '/answer' do
-  if @client.authorized?
     @question = Question.get(get_unanswered_question(get_twitter_uid))
   
     erb :answer
-  else
-    redirect '/'
-  end
 end
 
 post '/answer' do
-  if @client.authorized?
     @question = Question.get(get_unanswered_question(get_twitter_uid))
  
     if @question 
@@ -182,9 +177,6 @@ post '/answer' do
     else
       redirect '/'
     end  
-  else
-    redirect '/'
-  end
 end
 
 # View Questions #
@@ -193,7 +185,7 @@ get '/view_question/:id' do
   @question = Question.get(params[:id])
   
   if !@question.nil?
-    erb :view_question
+    erb :answer
   else
     redirect '/'
   end
