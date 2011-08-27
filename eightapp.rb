@@ -141,18 +141,23 @@ end
 
 # Answer a Question #
 #####################
-get '/answer/*' do
-    value = params[:splat].first.to_i if params[:splat].first.to_i =~ /\d*/
-  
-    if value.nil?
-      if @client.authorized? 
-        @question = Question.get(get_random_question_not_own_user)
-      else
-        @question = Question.get(get_random_question)
-      end
-    else 
-      @question = Question.get(value)
+get '/answer' do
+    if @client.authorized? 
+      @question = Question.get(get_random_question_not_own_user)
+    else
+      @question = Question.get(get_random_question)
     end
+    
+    if @question
+      erb :answer
+    else
+      redirect "/"
+    end
+end
+
+
+get '/answer/:id' do
+    @question = Question.get(:id)
     
     if @question
       erb :answer
