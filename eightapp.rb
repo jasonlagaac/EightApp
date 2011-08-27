@@ -131,7 +131,7 @@ get '/question_posted/share' do
   if @client.authorized?
     user = User.first(:twitter_id => get_twitter_uid)
     question = Question.last(:user_id => user.id)
-    url = Googl.shorten("http://eightapp.safetyscissors.co/view_question/#{question.id}")
+    url = Googl.shorten("http://eightapp.safetyscissors.co/answer/#{question.id}")
     message = "I asked \"#{question.question_txt}\" on eight #{url.short_url} #eightapp"
     @client.update(message)
   end
@@ -141,14 +141,22 @@ end
 
 # Answer a Question #
 #####################
-get '/answer' do
-    if @client.authorized? 
-      @question = Question.get(get_random_question_not_own_user)
-    else
-      @question = Question.get(get_random_question)
+get '/answer/:id' do
+    if :id.nil?
+      if @client.authorized? 
+        @question = Question.get(get_random_question_not_own_user)
+      else
+        @question = Question.get(get_random_question)
+      end
+    else 
+      @question = Question.get(:id)
     end
     
-    erb :answer
+    if @question
+      erb :answer
+    else
+      redirect "/"
+    end
 end
 
 post '/answer/:id' do
