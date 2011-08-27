@@ -141,15 +141,17 @@ end
 
 # Answer a Question #
 #####################
-get '/answer/:id' do
-    if :id.nil?
+get '/answer/*' do
+    value = params[:splat].first.to_i if params[:splat].first.to_i ~= /\d*/
+  
+    if value.nil?
       if @client.authorized? 
         @question = Question.get(get_random_question_not_own_user)
       else
         @question = Question.get(get_random_question)
       end
     else 
-      @question = Question.get(:id)
+      @question = Question.get(value)
     end
     
     if @question
@@ -236,9 +238,6 @@ get '/auth' do
   rescue OAuth::Unauthorized
   end
 
-
-  
-    
   puts get_twitter_username
   
   if @client.authorized?
