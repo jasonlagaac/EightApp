@@ -306,8 +306,9 @@ helpers do
   def get_random_question_not_own_user
     repository(:default).adapter.query(
       "SELECT id FROM questions
+      WHERE user_twitter_id != #{get_twitter_uid}
       ORDER BY RANDOM()
-      LIMIT 1 WHERE user_twitter_id != #{get_twitter_uid}"
+      LIMIT 1"
     )
   end
 end
