@@ -29,22 +29,12 @@
 		  <div id="separator">
       </div>
 		  
-    <div id="result">
-	  <div id="value-major">
-     	<%= @question.vote_no %> 
-      </div>
-      <div id="value-major">
+    <div id="result"> 
       	<input class="action" type="submit" name="post[answer]" value="no">
-      </div>
     </div>
   
     <div id="result">
-	  <div id="value-major">
-	     <%= @question.vote_yes %> 
-	   </div>
-	  <div id="value-major">
       	<input class="action" type="submit" name="post[answer]" value="yes">
-	  </div>
     </div>
   <% else %>
     <div id="question-view">
