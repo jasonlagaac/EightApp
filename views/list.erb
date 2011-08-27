@@ -10,7 +10,7 @@
       <%= will_paginate @questions, :page_links => false %>
     </div>
       <% @questions.each do | record |  %>
-      <a href="/answer/<%= record.id %>"> 
+      <a href="/view_question/<%= record.id %>"> 
         <div id="own-question">
           <div class="text"><%= record.question_txt  %></div>
           <div class="answer-list">asked by <%= User.first(:twitter_id => record.user_twitter_id).username %></div>
