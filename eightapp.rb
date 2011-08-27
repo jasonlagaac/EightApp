@@ -237,14 +237,16 @@ get '/auth' do
   end
 
 
-  session[:access_token] = @access_token.token
-  session[:secret_token] = @access_token.secret
-  session[:user] = true
+  
     
   puts get_twitter_username
   
-  if @client.authorized?
-      new_user = User.new(
+  if @client.authorized
+    session[:access_token] = @access_token.token
+    session[:secret_token] = @access_token.secret
+    session[:user] = true
+    
+    new_user = User.new(
                     :twitter_id => get_twitter_uid,
                     :username => get_twitter_username, 
                     :access_token => @access_token.token, 
