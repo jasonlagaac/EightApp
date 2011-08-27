@@ -148,22 +148,15 @@ get '/answer' do
       @question = Question.get(get_random_question)
     end
     
-    if @question
-      erb :answer
-    else
-      redirect "/"
-    end
+
+    erb :answer
 end
 
 
 get '/answer/:id' do
     @question = Question.get(:id)
     
-    if @question
-      erb :answer
-    else
-      redirect "/"
-    end
+    erb :answer
 end
 
 post '/answer/:id' do
