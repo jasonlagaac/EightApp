@@ -142,7 +142,7 @@ end
 # Answer a Question #
 #####################
 get '/answer/*' do
-    value = params[:splat].first.to_i if params[:splat].first.to_i ~= /\d*/
+    value = params[:splat].first.to_i if params[:splat].first.to_i =~ /\d*/
   
     if value.nil?
       if @client.authorized? 
