@@ -161,7 +161,7 @@ end
 
 post '/answer/:id' do
 
-    @question = Question.get(:id)
+    @question = Question.get(params[:id])
  
     if @question 
       if (params[:post][:answer] == 'yes')
