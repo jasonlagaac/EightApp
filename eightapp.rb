@@ -241,7 +241,7 @@ get '/auth' do
     
   puts get_twitter_username
   
-  if @client.authorized
+  if @client.authorized?
     session[:access_token] = @access_token.token
     session[:secret_token] = @access_token.secret
     session[:user] = true
