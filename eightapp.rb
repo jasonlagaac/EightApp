@@ -162,7 +162,7 @@ post '/answer/:id' do
         redirect '/answer'
       end
     else
-      redirect '/answer'
+      redirect '/'
     end  
     
     redirect '/answer'
