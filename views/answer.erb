@@ -1,21 +1,32 @@
 <div id="content-ask">
+  <% if @client.authorized? %>
   <div id="content-top">
     <a href="/">&#8592; back</a>
     <a href="/my_questions" id="menu_item">my questions.</a>
     <a href="/answer" id="menu_item_selected">answer.</a>
     <a href="/ask" id="menu_item">ask.</a>
   </div>
+  <% else %>
+  <div id="content-top">
+    <a href="/">&#8592; back</a>
+    <a href="/connect" id="menu_item">join.</a>
+    <a href="/answer" id="menu_item_selected">answer.</a>
+	<a href="/list" id="menu_item">take a peek.</a>
+  </div>
+  <% end %>
   <% if @question %>
-    <form action="/answer" method="post">
-      <div id="question-view">
-        <div id="icon">
-          <img src="/images/question.png" width=90 height=90 />
-        </div>
-        <div id="details">
-          <p><%= @question.question_txt %></p>
-        </div>
-      </div>
-      <div id="separator">
+    <form action="/answer/<%= @question.id %>" method="post">
+      	<div id="question-view">
+		    <div id="icon">
+		      	<img src="http://api.twitter.com/1/users/profile_image/<%= User.first(:id => @question.user_id).username %>?size=bigger" 
+				width=75 height=75 />
+		    </div>
+		    <div id="details">
+			  <p><h1><%= User.first(:id => @question.user_id).username %> asked:</h1></p>
+		      <p><%= @question.question_txt %></p>
+		    </div>
+		  </div>
+		  <div id="separator">
       </div>
 		  
     <div id="result">
@@ -34,4 +45,10 @@
   <% end %>
     </form>
   </div>
+
+ <% if !@client.authorized? %>
+  <div id="result">
+	<p><a href="/">Want to ask your questions?<br/> Join eight via twitter</a></p>
+  </div>
+  <% end %>
 </div>

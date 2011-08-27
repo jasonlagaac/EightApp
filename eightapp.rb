@@ -7,7 +7,6 @@ require "dm-timestamps"
 require "dm-migrations"
 require "dm-validations"
 require "dm-postgres-adapter"
-#require "sqlite3"
 require "twitter_oauth"
 require "googl"
 
@@ -37,7 +36,6 @@ class User
   property :secret_token, String,   :length => 128
   
   has n,  :questions
-  has n,  :answers
 end
 
 
@@ -56,17 +54,6 @@ class Question
 
 end
 
-# Answer Class #
-################
-class Answer
-  include DataMapper::Resource
-  
-  property :id,   Serial
-  property :answered_question_id,   Integer
-  
-  belongs_to :user  
-
-end
 
 # Create the database schema #
 ##############################
@@ -155,37 +142,30 @@ end
 # Answer a Question #
 #####################
 get '/answer' do
-  if @client.authorized?
-    @question = Question.get(get_unanswered_question(get_twitter_uid))
+    @question = Question.get(get_random_question)
   
     erb :answer
-  else
-    redirect '/'
-  end
 end
 
-post '/answer' do
-  if @client.authorized?
-    @question = Question.get(get_unanswered_question(get_twitter_uid))
+post '/answer/:id' do
+
+    @question = Question.get(:id)
  
     if @question 
       if (params[:post][:answer] == 'yes')
         @question.vote_yes += 1
         @question.save
-        answered_question(user_id, question.uid)
       elsif (params[:post][:answer] == 'no')
         @question.vote_no += 1
         @question.save
-        answered_question(user_id, question.id)
       else
         redirect '/answer'
       end
     else
-      redirect '/'
+      redirect '/answer'
     end  
-  else
-    redirect '/'
-  end
+    
+    redirect '/answer'
 end
 
 # View Questions #
@@ -296,43 +276,12 @@ helpers do
     
     return nil
   end
-
-  # Saved Answered Question 
-  def answered_question(uid, qid) 
-    answer = Answer.new
-    answer.user_id = uid
-    answer.answered_question_id = qid
-
-    if answer.save
-      return true
-    else
-      return false
-    end
-  end
-
-  # Obtain list of un-answered questions
-  def questions_list( uid )
+  
+  def get_random_question
     repository(:default).adapter.query(
-      "SELECT questions.id FROM questions
-       WHERE  questions.user_twitter_id != #{uid}"
+      "SELECT id FROM questions
+      ORDER BY RANDOM()
+      LIMIT 1"
     )
   end
-
-  # Obtain a list of answered questions 
-  def get_answered_questions( uid )
-    repository(:default).adapter.query(
-      "SELECT answers.answered_question_id FROM answers
-       WHERE user_twitter_id = #{uid}"
-    )
-  end
-
-  # Get a single unanswered question
-  def get_unanswered_question( uid )
-    answered_questions = get_answered_questions( uid )
-    questions = questions_list( uid )
-
-    result = questions - answered_questions
-    return result.first
-  end
-
 end
