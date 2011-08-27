@@ -6,7 +6,8 @@ require "dm-core"
 require "dm-timestamps"
 require "dm-migrations"
 require "dm-validations"
-require "dm-postgres-adapter"
+#require "dm-postgres-adapter"
+require "sqlite3"
 require "twitter_oauth"
 require "googl"
 
@@ -154,12 +155,17 @@ end
 # Answer a Question #
 #####################
 get '/answer' do
+  if @client.authorized?
     @question = Question.get(get_unanswered_question(get_twitter_uid))
   
     erb :answer
+  else
+    redirect '/'
+  end
 end
 
 post '/answer' do
+  if @client.authorized?
     @question = Question.get(get_unanswered_question(get_twitter_uid))
  
     if @question 
@@ -177,6 +183,9 @@ post '/answer' do
     else
       redirect '/'
     end  
+  else
+    redirect '/'
+  end
 end
 
 # View Questions #
@@ -185,7 +194,7 @@ get '/view_question/:id' do
   @question = Question.get(params[:id])
   
   if !@question.nil?
-    erb :answer
+    erb :view_question
   else
     redirect '/'
   end
