@@ -142,8 +142,12 @@ end
 # Answer a Question #
 #####################
 get '/answer' do
-    @question = Question.get(get_random_question)
-  
+    if @client.authorized? 
+      @question = Question.get(get_random_question_not_own_user)
+    else
+      @question = Question.get(get_random_question)
+    end
+    
     erb :answer
 end
 
@@ -282,6 +286,14 @@ helpers do
       "SELECT id FROM questions
       ORDER BY RANDOM()
       LIMIT 1"
+    )
+  end
+  
+  def get_random_question_not_own_user
+    repository(:default).adapter.query(
+      "SELECT id FROM questions
+      ORDER BY RANDOM()
+      LIMIT 1 WHERE user_twitter_id != #{get_titter_uid}"
     )
   end
 end
