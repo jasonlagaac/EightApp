@@ -293,7 +293,7 @@ helpers do
     repository(:default).adapter.query(
       "SELECT id FROM questions
       ORDER BY RANDOM()
-      LIMIT 1 WHERE user_twitter_id != #{get_titter_uid}"
+      LIMIT 1 WHERE user_twitter_id != #{get_twitter_uid}"
     )
   end
 end
